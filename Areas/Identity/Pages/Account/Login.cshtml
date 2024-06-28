@@ -1,0 +1,157 @@
+﻿@page
+@model LoginModel
+
+<div class="card shadow border-0 mt-4">
+    <style>
+        .background-radial-gradient {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(650px circle at 0% 0%, hsl(218, 41%, 35%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%), radial-gradient(1250px circle at 100% 100%, hsl(218, 41%, 45%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%);
+        }
+
+        #radius-shape-1 {
+            height: 220px;
+            width: 220px;
+            top: -60px;
+            left: -130px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        #radius-shape-2 {
+            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+            bottom: -60px;
+            right: -110px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        .bg-glass {
+            background-color: hsla(0, 0%, 100%, 0.9) !important;
+            backdrop-filter: saturate(300%) blur(0px);
+        }
+
+        .card-body {
+            padding: 0px
+        }
+
+        .ani {
+            font-family: 'Josefin Sans', sans-serif;
+            -webkit-transition: .5s;
+            -moz-transition: .5s;
+            transition: .5s;
+            -webkit-transform: rotateY(35deg);
+            -moz-transform: rotateY(335eg);
+            transform: rotateY(35deg);
+        }
+
+            .ani:hover {
+                -webkit-transform: rotate(0);
+                -moz-transform: rotate(0);
+                transform: rotate(0);
+            }
+    </style>
+    <div class="card-body">
+        <div class="row">
+            <section class="background-radial-gradient overflow-hidden">
+               
+
+                <div class="container px-4 py-5 px-md-5 text-center text-lg-start ">
+                    <div class="row gx-lg-5 align-items-center mx-md-5 mx-sm-0">
+                        <div class="col-lg-12 mb-5 mb-lg-0 position-relative mx-md-5 mx-sm-0">
+                            <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                            <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                            <div class="ani card bg-glass mx-md-5 mx-sm-0">
+                                <div class="card-header bg-secondary bg-gradient ml-0 py-4">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <h2 class="py-2 text-white ">Log In</h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body px-4 py-5 px-md-5">
+                                    <section>
+                                        <form id="account" method="post">
+                                            
+                                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                                                <label asp-for="Input.Email" class="form-label">Email</label>
+                                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                                                <label asp-for="Input.Password" class="form-label">Password</label>
+                                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                            </div>
+                                            <div class="checkbox mb-3">
+                                                <label asp-for="Input.RememberMe" class="form-label">
+                                                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                                            </div>
+                                            <div class="d-flex justify-content-between pt-2">
+                                                <p>
+                                                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                                                </p>
+                                                <p>
+                                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                                </p>
+                                                <p>
+                                                    <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                                                </p>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+           @* <div class="col-md-12">
+                <section>
+                    <p class="divider-text d-flex pt-3">or</p>
+                    <h3>Use another service to log in.</h3>
+
+                    @{
+                        if ((Model.ExternalLogins?.Count ?? 0) == 0) {
+                            <div>
+                                <p>
+                                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                        article
+                                        about setting up this ASP.NET application to support logging in via external services
+                                    </a>.
+                                </p>
+                            </div>
+                        }
+                        else {
+                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                <div>
+                                    <p>
+                                        @foreach (var provider in Model.ExternalLogins!) {
+                                            <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        }
+                                    </p>
+                                </div>
+                            </form>
+                        }
+                    }
+                </section>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

@@ -1,0 +1,357 @@
+﻿@model Ecommerce.Models.Cart
+
+<style>
+    body {
+        background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    }
+
+    #bgh {
+        background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    }
+
+    #bg {
+        transition: all 2s all;
+        background: linear-gradient(to right, #33A9A9 0%, #2E4DBF 99%, #891D9A 100%);
+    }
+
+    .glass {
+        width: 175px;
+        height: 175px;
+        position: absolute;
+        border-radius: 50%;
+        cursor: crosshair;
+        /* Multiple box shadows to achieve the glass effect */
+        box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.85), 0 0 7px 7px rgba(0, 0, 0, 0.25), inset 0 0 40px 2px rgba(0, 0, 0, 0.25);
+        /* hide the glass by default */
+        display: none;
+    }
+
+    #wrap {
+        max-width: 700px;
+        margin: 20px auto;
+    }
+</style>
+<form method="post">
+
+
+
+    <div class="card text-white shadow border-0 mt-4 mb-4">
+
+        <input type="hidden" asp-for="ProductId" />
+        <div id="bgh" class="card-header py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white text-uppercase">@Model.Product.Title</h1>
+                    <h3 class="text-white-50 fw-semibold mb-0">by @Model.Product.Author</h3>
+                </div>
+            </div>
+        </div>
+        <div class="card-body " id="bg">
+            <div class="py-3">
+                <div class="row px-md-5 px-sm-5">
+                    <div class="col-12 col-lg-6 px-md-5 ">
+                        @* <img src="@Model.Product.ImageUrl" width="100%" class="rounded" />
+                        *@
+
+                        <div id="Imgsl" class="carousel slide " data-bs-ride="carousel">
+
+                            <div class="carousel-inner ">
+                                <div class="carousel-item active image-wrapper product">
+                                    <img src="@Model.Product.ImageUrl" class="d-block w-100 magniflier" />
+                                </div>
+                                <div class="carousel-item image-wrapper product">
+                                    <img src="@Model.Product.ImageUrl1" class="d-block w-100 magniflier" />
+                                </div>
+                                <div class="carousel-item image-wrapper product">
+                                    <img src="@Model.Product.ImageUrl2" class="d-block w-100 magniflier" />
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+
+                            @* <button class="carousel-control-prev" type="button" data-bs-target="#Imgsl" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true">
+                            <i class="fa-solid fa-circle-chevron-left fa-2xl"></i>
+                            </span>
+                            <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#Imgsl" data-bs-slide="next">
+                            <span class="carousel-control-next-icon fw-bolder" aria-hidden="true">
+                            <i class="fa-solid fa-circle-chevron-right fa-2xl"></i>
+                            </span>
+                            <span class="visually-hidden">Next</span>
+                            </button>*@
+                            <div class="carousel-indicators border-end border-start border-top border-bottom row justify-content-between">
+                                
+                                    <div class="col-4 position-relative">
+                                        <button type="button" data-bs-target="#Imgsl" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1">
+                                            <img src="@Model.Product.ImageUrl" class="w-100 rounded" />
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" data-bs-target="#Imgsl" data-bs-slide-to="1" aria-label="Slide 2" class="btn btn-danger">
+                                            <img src="@Model.Product.ImageUrl1" class="w-100 l rounded" />
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" data-bs-target="#Imgsl" data-bs-slide-to="2" aria-label="Slide 3">
+                                            <img src="@Model.Product.ImageUrl2" class="w-100 rounded" />
+                                        </button>
+                                    </div>
+                                
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="col-12 col-lg-5  px-sm-2 pt-2 pt-lg-0">
+
+                        <div class="col-12 ">
+                            <h6 class="text-opacity-50 lh-sm">Name Of The Book :  @Model.Product.Name</h6>
+                        </div>
+                        <div class="col-12 ">
+                            <h6 class="text-opacity-50 ">Title :  @Model.Product.Title</h6>
+                        </div>
+                        <div class="row ">
+                            <h6 class="text-opacity-50 ">ISBN : @Model.Product.ISBN</h6>
+                        </div>
+                        <div class="row ">
+                            <h3 class="text-opacity-50  pb-2">
+                                List Price:
+                                <span class="text-decoration-line-through">
+                                    @Model.Product.ListPrice.ToString("c")
+                                </span>
+                            </h3>
+                        </div>
+
+                        <div class="row  ">
+                            <div class="p-1 col-4 fw-bolder fa-2x border-top">
+                                <div>Price</div>
+                            </div>
+                            <div class="col-8  fw-bolder fa-2x border-top">
+                                <div>@Model.Product.Price.ToString("c") &nbsp;Off @Model.Product.Discount%</div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-primary text-white border-0 fw-semibold"
+                                          id="inputGroup-sizing-default">
+                                        Count
+                                    </span>
+                                    <input type="number" min="1" asp-for="Count" value="1" class="form-control text-end" asp-action="Index"
+                                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-12 col-md-6 pb-1">
+                                <button type="submit"
+                                        class="btn btn-success w-100 py-2 text-uppercase fw-semibold">
+                                    Add to Cart &nbsp;&nbsp;<i class="bi bi-cart-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-6 py-2">
+                                <a asp-action="Index" class="btn btn-outline-danger w-100 mb-5 fw-semibold text-uppercase">
+                                    <small>Back to home</small>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="row my-3 border-bottom">
+                            <h1>Description</h1>
+                            <div class=" lh-sm border-top ">@Html.Raw(Model.Product.Description)</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script>
+        var blendAmount = 50;
+        var delay = -10;
+        var windowWidth = window.innerWidth;
+        var bg = document.getElementById("bg");
+
+        document.onmousemove = function (e) {
+            mouseX = Math.round(e.pageX / windowWidth * 100 - delay);
+
+            col1 = mouseX - blendAmount;
+            col2 = mouseX + blendAmount;
+
+            bg.style.background = "linear-gradient(to right, #2E4DBF " + col1 + "%, #891D9A " + col2 + "%)";
+        }
+
+
+
+
+        $(function () {
+
+            var native_width = 0;
+            var native_height = 0;
+            var mouse = { x: 0, y: 0 };
+            var magnify;
+            var cur_img;
+
+            var ui = {
+                magniflier: $('.magniflier')
+            };
+
+            // Add the magnifying glass
+            if (ui.magniflier.length) {
+                var div = document.createElement('div');
+                div.setAttribute('class', 'glass');
+                ui.glass = $(div);
+
+                $('body').append(div);
+            }
+
+
+            // All the magnifying will happen on "mousemove"
+
+            var mouseMove = function (e) {
+                var $el = $(this);
+
+                // Container offset relative to document
+                var magnify_offset = cur_img.offset();
+
+                // Mouse position relative to container
+                // pageX/pageY - container's offsetLeft/offetTop
+                mouse.x = e.pageX - magnify_offset.left;
+                mouse.y = e.pageY - magnify_offset.top;
+
+                // The Magnifying glass should only show up when the mouse is inside
+                // It is important to note that attaching mouseout and then hiding
+                // the glass wont work cuz mouse will never be out due to the glass
+                // being inside the parent and having a higher z-index (positioned above)
+                if (
+                    mouse.x < cur_img.width() &&
+                    mouse.y < cur_img.height() &&
+                    mouse.x > 0 &&
+                    mouse.y > 0
+                ) {
+
+                    magnify(e);
+                }
+                else {
+                    ui.glass.fadeOut(100);
+                }
+
+                return;
+            };
+
+            var magnify = function (e) {
+
+                // The background position of div.glass will be
+                // changed according to the position
+                // of the mouse over the img.magniflier
+                //
+                // So we will get the ratio of the pixel
+                // under the mouse with respect
+                // to the image and use that to position the
+                // large image inside the magnifying glass
+
+                var rx = Math.round(mouse.x / cur_img.width() * native_width - ui.glass.width() / 2) * -1;
+                var ry = Math.round(mouse.y / cur_img.height() * native_height - ui.glass.height() / 2) * -1;
+                var bg_pos = rx + "px " + ry + "px";
+
+                // Calculate pos for magnifying glass
+                //
+                // Easy Logic: Deduct half of width/height
+                // from mouse pos.
+
+                // var glass_left = mouse.x - ui.glass.width() / 2;
+                // var glass_top  = mouse.y - ui.glass.height() / 2;
+                var glass_left = e.pageX - ui.glass.width() / 2;
+                var glass_top = e.pageY - ui.glass.height() / 2;
+                //console.log(glass_left, glass_top, bg_pos)
+                // Now, if you hover on the image, you should
+                // see the magnifying glass in action
+                ui.glass.css({
+                    left: glass_left,
+                    top: glass_top,
+                    backgroundPosition: bg_pos
+                });
+
+                return;
+            };
+
+            $('.magniflier').on('mousemove', function () {
+                ui.glass.fadeIn(100);
+
+                cur_img = $(this);
+
+                var large_img_loaded = cur_img.data('large-img-loaded');
+                var src = cur_img.data('large') || cur_img.attr('src');
+
+                // Set large-img-loaded to true
+                // cur_img.data('large-img-loaded', true)
+
+                if (src) {
+                    ui.glass.css({
+                        'background-image': 'url(' + src + ')',
+                        'background-repeat': 'no-repeat'
+                    });
+                }
+
+                // When the user hovers on the image, the script will first calculate
+                // the native dimensions if they don't exist. Only after the native dimensions
+                // are available, the script will show the zoomed version.
+                //if(!native_width && !native_height) {
+
+                if (!cur_img.data('native_width')) {
+                    // This will create a new image object with the same image as that in .small
+                    // We cannot directly get the dimensions from .small because of the
+                    // width specified to 200px in the html. To get the actual dimensions we have
+                    // created this image object.
+                    var image_object = new Image();
+
+                    image_object.onload = function () {
+                        // This code is wrapped in the .load function which is important.
+                        // width and height of the object would return 0 if accessed before
+                        // the image gets loaded.
+                        native_width = image_object.width;
+                        native_height = image_object.height;
+
+                        cur_img.data('native_width', native_width);
+                        cur_img.data('native_height', native_height);
+
+                        //console.log(native_width, native_height);
+
+                        mouseMove.apply(this, arguments);
+
+                        ui.glass.on('mousemove', mouseMove);
+                    };
+
+
+                    image_object.src = src;
+
+                    return;
+                } else {
+
+                    native_width = cur_img.data('native_width');
+                    native_height = cur_img.data('native_height');
+                }
+                //}
+                //console.log(native_width, native_height);
+
+                mouseMove.apply(this, arguments);
+
+                ui.glass.on('mousemove', mouseMove);
+            });
+
+            ui.glass.on('mouseout', function () {
+                ui.glass.off('mousemove', mouseMove);
+            });
+
+        });
+    </script>
+}

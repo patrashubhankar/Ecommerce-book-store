@@ -1,0 +1,159 @@
+﻿@model IEnumerable<Product>
+@{
+    Layout = "_LayoutSearch";
+}
+<style>
+    .background-radial-gradient {
+        background-color: hsl(218, 41%, 15%);
+        background-image: radial-gradient(650px circle at 0% 0%, hsl(218, 41%, 35%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%), radial-gradient(1250px circle at 100% 100%, hsl(218, 41%, 45%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%);
+    }
+
+    img {
+        max-width: 100%;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .image-wrapper:hover img {
+        transform: scale(1.2);
+    }
+
+    #ho:before {
+        content: '';
+        display: block;
+        position: absolute;
+        height: 0%;
+        width: 100%;
+        bottom: 0;
+        transition: height 0.5s ease-in-out;
+        background: linear-gradient( to bottom, transparent 0%, blue 300%);
+    }
+
+    #ho:hover:before {
+        height: 100%;
+    }
+</style>
+<div class="row background-radial-gradient px-lg-4">
+    @if (Model.Count() == 0)
+    {
+        if (Convert.ToBoolean(TempData["flag"]))
+        {
+            <h1 class="text-danger">No Search Result Is Found for This Search !!!</h1>
+            <h2 class="text-danger  mx-5">'@TempData["search"]'</h2>
+        }
+        else
+        {
+            <h2 class="text-danger  mx-5">No books are available.......</h2>
+            <h2 class="text-danger  mx-5">Please come back again after some times.</h2>
+        }
+    }
+
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-4 col-xl-3 col-sm-6 pt-1 shadow " id="">
+            <div class="row p-lg-2">
+                <div class="col-12 p-3">
+                    <div class="card border-4 p-2  border-danger  border-top border-5 rounded" style="height:70vh" id="">
+                        <a asp-action="Details"
+                           asp-route-productId="@product.Id">
+                            <div id="Img-@product.Id" class="carousel slide " data-bs-ride="carousel">
+                                <div class="carousel-indicators ">
+                                    @if (product.ImageUrl != null)
+                                    {
+                                        <button type="button" data-bs-target="#Img-@product.Id" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                    }
+                                    @if (product.ImageUrl1 != null)
+                                    {
+                                        <button type="button" data-bs-target="#Img-@product.Id" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                    }
+                                    @if (product.ImageUrl2 != null)
+                                    {
+                                        <button type="button" data-bs-target="#Img-@product.Id" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                    }
+
+                                </div>
+                                <div class="carousel-inner ">
+                                    <div class="carousel-item active image-wrapper">
+                                        @if (product.ImageUrl != null)
+                                        {
+                                            <img src="@product.ImageUrl" style="height:40vh;" class="card-img-top rounded " />
+                                        }
+                                    </div>
+                                    <div class="carousel-item image-wrapper">
+                                        @if (product.ImageUrl1 != null)
+                                        {
+                                            <img src="@product.ImageUrl1" style="height:40vh;" class="card-img-top rounded " />
+                                        }
+                                    </div>
+                                    <div class="carousel-item image-wrapper">
+                                        @if (product.ImageUrl2 != null)
+                                        {
+                                            <img src="@product.ImageUrl2" style="height:40vh;" class="card-img-top rounded " />
+                                        }
+                                    </div>
+
+                                </div>
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#Img-@product.Id" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true">
+                                        <i class="fa-solid fa-circle-chevron-left fa-2xl"></i>
+                                    </span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#Img-@product.Id" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon fw-bolder" aria-hidden="true">
+                                        <i class="fa-solid fa-circle-chevron-right fa-2xl"></i>
+                                    </span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </a>
+
+
+                        <div class="card-body pb-0 overflow-auto" id="">
+                            <div class="pl-1">
+                                <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
+                                <p class="card-title text-warning text-center">by <b>@product.Author</b></p>
+
+                            </div>
+                            <div class="">
+                                <p class="text-dark text-opacity-75 text-center mb-0">
+                                    List Price:
+                                    <span class="text-decoration-line-through">
+                                        @product.ListPrice.ToString("c")
+                                    </span>
+                                </p>
+
+                                <p class="text-dark text-opacity-75 text-center">
+                                    As low as:
+                                    <span>
+                                        @product.Price.ToString("c")
+                                    </span>
+                                    <span class="text-primary ">
+                                        <strong>&nbsp;Off @product.Discount%</strong>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="">
+                            <a asp-action="Details"
+                               asp-route-productId="@product.Id"
+                               class="btn btn-primary bg-gradient border-0 form-control">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script>
+
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -1,0 +1,327 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookStore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/Ecommerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/FontAwesome/css/all.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
+</head>
+<body>
+    <header>
+        @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) || User.IsInRole(SD.Role_Customer))
+        {
+            <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-black border-bottom box-shadow mb-2">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookStore</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                                @await Component.InvokeAsync("Category")
+                            
+                            @if (User.IsInRole(SD.Role_Employee))
+                            {
+                                @*<li class="nav-item">
+                                    <partial name="_CategoryPartial" />
+                                </li>*@
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+
+                            @if (User.IsInRole(SD.Role_Admin))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Content Managment
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+
+                                    </ul>
+                                </li>
+                            }
+                            @if (User.IsInRole(SD.Role_Employee))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                </li>
+
+                            }
+                        </ul>
+
+                        <form method="get" asp-area="Customer" asp-controller="Home" asp-action="Index"  class="text-white">
+                            <div hidden>
+                            <strong>Search By:</strong>
+                            @Html.RadioButton("SearchBy","Name",true)Name
+                            @Html.RadioButton("SearchBy","ISBN")ISBN
+                            </div>
+                            <div class="d-flex">
+                                @if (TempData["search"] == null)
+                                {
+                                    <input class="form-control" value="" name="search" id="InputSearch" type="search" placeholder="What are you looking" aria-label="Search">
+                                }
+                                else
+                                {
+                                    <input class="form-control" value=@TempData["search"].ToString() name="search" id="InputSearch" type="search" placeholder="What are you looking" aria-label="Search">
+                                    
+                                }
+                                <button class="btn btn-primary pe-3" id="InputSearchButton" type="submit">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="navbar-nav ">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+                            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                @await Component.InvokeAsync("Cart")
+                            </a>
+                        </div>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        }
+        else
+        {
+            <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-dark bg-black border-bottom box-shadow mb-2">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookStore</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                                @await Component.InvokeAsync("Category")
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        </ul>
+                        <form method="get" asp-area="Customer" asp-controller="Home" asp-action="Index" class="text-white">
+                            <div hidden>
+                                <strong>Search By:</strong>
+                                @Html.RadioButton("SearchBy","Name",true)Name
+                                @Html.RadioButton("SearchBy","ISBN")ISBN
+                            </div>
+                            <div class="d-flex">
+                                @if (TempData["search"] == null)
+                                {
+                                    <input class="form-control" value="" name="search" id="InputSearch" type="search" placeholder="What are you looking" aria-label="Search">
+                                }
+                                else
+                                {
+                                    <input class="form-control" value=@TempData["search"].ToString() name="search" id="InputSearch" type="search" placeholder="What are you looking" aria-label="Search">
+
+                                }
+                                <button class="btn btn-primary pe-3" id="InputSearchButton" type="submit">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="navbar-nav ">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+                            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                @await Component.InvokeAsync("Cart")
+                            </a>
+                        </div>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        }
+
+    </header>
+    <div class="container-flout">
+
+        <main role="main" class="p-0 m-0 ">
+            <partial name="_Notification" />
+            @if (TempData["search"] == null)
+            {
+                <partial name="_Sliding" />
+            }
+            @RenderBody()
+        </main>
+
+    </div>
+
+    <footer class="bg-dark text-center text-white">
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!-- Section: Social media -->
+            <section class="mb-4">
+                <span class="fw-bolder">
+                    Follow Us :&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <!-- Facebook -->
+                <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/Infinitystore6551?mibextid=ZbWKwL" role="button">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+
+                <!-- Twitter -->
+                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                    <i class="fab fa-twitter"></i>
+                </a>
+
+                <!-- Google -->
+                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                    <i class="fab fa-google"></i>
+                </a>
+
+                <!-- Instagram -->
+                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <!-- Linkedin -->
+                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+
+                <!-- Github -->
+                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                    <i class="fab fa-github"></i>
+                </a>
+            </section>
+            <!-- Section: Social media -->
+            <!-- Section: Links -->
+            <section class="">
+                <!--Grid row-->
+                <div class="row">
+                    <!--Grid column-->
+                    <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">About</h5>
+
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a class="text-white" asp-area="Customer" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                            </li>
+                            <li>
+                                <a asp-area="Customer" asp-controller="Home" asp-action="AboutUs" class="text-white">About Us</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Careers</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">BooKStore Stories</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Corporate Information</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Grid column-->
+                    <!--Grid column-->
+                    <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                        <h4 class="text-uppercase">Help</h4>
+                        <h6 class="text-uppercase">24*7 Available</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-white"> </a>
+                            </li>
+                            <li>
+                                Phone Number : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:1234567890" class=""><i class="fa fa-phone-alt text-primary mr-3"></i>1234567890</a>
+                                    </li>
+                                    <li>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:0123456789" class=""><i class="fa fa-phone-alt text-primary mr-3"></i>0123456789</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Email Address :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:bookstore@store.com" class=""><i class="fa fa-envelope text-primary mr-3"></i>bookstore@store.com</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Grid column-->
+                    <!--Grid column-->
+                    @*<div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-white">Link 9</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 10</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 11</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 12</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-white">Link 13</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 14</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 15</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-white">Link 16</a>
+                            </li>
+                        </ul>
+                    </div>*@
+                    <!--Grid column-->
+                </div>
+                <!--Grid row-->
+            </section>
+            <!-- Section: Links -->
+        </div>
+        <!-- Grid container -->
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2020 Copyright:
+            <a class="text-white" href="#">BookStore</a>
+            </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.tiny.cloud/1/g28lhnxtlihu4l4a381gw7tz47voznshwbi10lmsvlekrfme/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

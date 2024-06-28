@@ -1,0 +1,131 @@
+﻿@model List<Product>
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-6 text-center">
+                <h2 class="text-white">List of Order</h2>
+            </div>
+            <div hidden class="col-6 text-center">
+                <a id="pending" asp-controller="Order" asp-action="Index" asp-route-status="pending" class="btn btn-success">
+                    Pending
+                </a>
+                <a id="approved" asp-controller="Order" asp-action="Index" asp-route-status="approved" class="btn btn-success">
+                    Approved
+                </a>
+                <a id="underprocess" asp-controller="Order" asp-action="Index" asp-route-status="underprocess" class="btn btn-success">
+                    Under Process
+                </a>
+                <a id="shipped" asp-controller="Order" asp-action="Index" asp-route-status="shipped" class="btn btn-success">
+                    Shipped
+                </a>
+                <a id="cancelled" asp-controller="Order" asp-action="Index" asp-route-status="cancelled" class="btn btn-success">
+                    Cancelled
+                </a>
+                <a id="all" asp-controller="Order" asp-action="Index" asp-route-status="all" class="btn btn-success">
+                    All
+                </a>
+            </div>
+            <div class="col-6 text-center">
+                <strong class="text-white">Order Sort By:</strong>
+                <select onChange="call()" id="orderSort" class="form-select">
+                    @if (TempData.ContainsKey("SearchStatus") && TempData["SearchStatus"] != null)
+                    {
+                        switch (TempData["SearchStatus"])
+                        {
+                            case "all":
+                                <option value="all" selected>all</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="underprocess">Under Process</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                break;
+                            case "shipped":
+                                <option value="all">all</option>
+                                <option value="shipped" selected>Shipped</option>
+                                <option value="underprocess">Under Process</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                break;
+                            case "underprocess":
+                                <option value="all">all</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="underprocess" selected>Under Process</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                break;
+                            case "pending":
+
+                                <option value="all">all</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="underprocess">Under Process</option>
+                                <option value="approved" selected>Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                break;
+                            case "approved":
+                                <option value="all">all</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="underprocess">Under Process</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending" selected>Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                break;
+                            case "cancelled":
+                                <option value="all">all</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="underprocess">Under Process</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled" selected>Cancelled</option>
+                                break;
+                            default:
+                                break;
+                        }
+                        TempData.Keep("SearchStatus");
+                    }
+                    else
+                    {
+                        <option value="all" selected>all</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="underprocess">Under Process</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+            </div>
+            <div class="col-6 text-end">
+                
+            </div>
+        </div>
+
+        <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Order Status</th>
+                    <th>Order Total</th>
+                    <th>Date Of Order</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Order.js"></script>
+
+}
